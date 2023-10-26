@@ -162,7 +162,7 @@ class AudioPlayerState extends State<AudioPlayer> {
 
   Future<void> play() {
     return _audioPlayer.play(
-      kIsWeb ? ap.UrlSource(widget.source) : ap.DeviceFileSource(widget.source),
+      ap.DeviceFileSource(widget.source),
     );
   }
 
