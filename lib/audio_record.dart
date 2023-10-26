@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
+import 'package:path_provider/path_provider.dart'; // Import the path_provider package
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:record/record.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
@@ -52,10 +53,24 @@ class _AudioRecorderState extends State<AudioRecorder> {
     await FFmpegKit.execute(arguments.join(' '));
   }
 
-  Future<void> _start() async {
+Future<void> _start() async {
     try {
       if (await _audioRecorder.hasPermission()) {
-        await _audioRecorder.start();
+        
+        // Get the app's directory
+        final Directory appDir = await getApplicationDocumentsDirectory();
+        final String recordingsDirPath = '${appDir.path}/Recordings';
+        
+        // Create a folder named 'Recordings' if it doesn't exist
+        final Directory recordingsDir = Directory(recordingsDirPath);
+        if (!await recordingsDir.exists()) {
+          await recordingsDir.create(recursive: true);
+        }
+        
+        // Get the next available file name
+        final String newRecordingName = await _getNextAvailableFileName(recordingsDirPath);
+        
+        await _audioRecorder.start(path: '$recordingsDirPath/$newRecordingName.m4a'); // Specify the path to save the recording
         _recordDuration = 0;
 
         _startTimer();
@@ -67,11 +82,21 @@ class _AudioRecorderState extends State<AudioRecorder> {
     }
   }
 
+  Future<String> _getNextAvailableFileName(String recordingsDirPath) async {
+    int i = 1;
+    while (await File('$recordingsDirPath/New_Recording_$i.m4a').exists()) {
+      i++;
+    }
+    return 'New_Recording_$i';
+  }
+
+
   Future<void> _stop() async {
     _timer?.cancel();
     _recordDuration = 0;
 
     String? path = await _audioRecorder.stop();
+    debugPrint("path!: $path");
     String wavPath = path!.replaceAll(".m4a", ".wav");
     await convertMp4ToWav(path, wavPath);
 
