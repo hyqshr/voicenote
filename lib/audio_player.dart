@@ -1,15 +1,14 @@
 import 'dart:async';
-
+import 'package:path_provider/path_provider.dart'; // Import the path_provider package
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart' as ap;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:whisper_gpt/bridge_generated.dart';
 
 class AudioPlayer extends StatefulWidget {
-  /// Path from where to play recorded audio
   final String source;
   final RsWhisperGptImpl api;
-
   /// Callback when audio file should be removed
   /// Setting this to null hides the delete button
   final VoidCallback onDelete;
