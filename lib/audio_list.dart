@@ -22,40 +22,27 @@ final api = RsWhisperGptImpl(dylib);
 
 
 class AudioList extends StatefulWidget {
+  final List<File> audioFiles;
+
+  AudioList({super.key, required this.audioFiles});
+
   @override
   _AudioListState createState() => _AudioListState();
 }
 
 class _AudioListState extends State<AudioList> {
-  List<File> audioFiles = [];
   final player = ap.AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-    _fetchAudios();
-  }
-
-  _fetchAudios() async {
-    final appDir = await getApplicationDocumentsDirectory();
-    final recordingDir = Directory(path.join(appDir.path));
-    if (await recordingDir.exists()) {
-      final entities = recordingDir.listSync();
-      for (var entity in entities) {
-        if (entity is File && path.extension(entity.path) == '.wav') {
-          setState(() {
-            audioFiles.add(entity);
-          });
-        }
-      }
-    }
   }
 
   void _deleteAudio(File file) async {
     try {
       await file.delete();
       setState(() {
-        audioFiles.remove(file);
+        widget.audioFiles.remove(file);
       });
     } catch (e) {
       print("Error deleting file: $e");
@@ -66,16 +53,16 @@ class _AudioListState extends State<AudioList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: audioFiles.length,
+      itemCount: widget.audioFiles.length,
       itemBuilder: (context, index) {
         return ExpansionTileCard(
-          title: Text(path.basenameWithoutExtension(audioFiles[index].path)),
+          title: Text(path.basenameWithoutExtension(widget.audioFiles[index].path)),
           children: <Widget>[
             AudioWidget(
-              source: audioFiles[index].path, 
+              source: widget.audioFiles[index].path, 
               api: api,
               onDelete: () {
-                  _deleteAudio(audioFiles[index]);
+                  _deleteAudio(widget.audioFiles[index]);
                   setState(() => ());
                 },
               )

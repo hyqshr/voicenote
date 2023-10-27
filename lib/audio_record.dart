@@ -7,8 +7,12 @@ import 'package:record/record.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
 class AudioRecorder extends StatefulWidget {
+  final VoidCallback onUpdate;
 
-  const AudioRecorder({Key? key}) : super(key: key);
+  const AudioRecorder({
+    Key? key,
+    required this.onUpdate,
+    }) : super(key: key);
 
   @override
   State<AudioRecorder> createState() => _AudioRecorderState();
@@ -102,6 +106,7 @@ Future<void> _start() async {
     wavPath = wavPath.replaceAll("file://", "");
     //override path
     path = wavPath;
+    widget.onUpdate();
   }
 
   Future<void> _pause() async {
