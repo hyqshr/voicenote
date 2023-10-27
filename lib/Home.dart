@@ -43,6 +43,7 @@ class _HomeState extends State<Home> {
           children: [
             Expanded(child: AudioList(audioFiles: audioFiles)), 
             AudioRecorder(onUpdate: (){
+              audioFiles.clear();
               setState(() {});
               _fetchAudios();
             },),
