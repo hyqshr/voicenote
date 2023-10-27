@@ -7,9 +7,8 @@ import 'package:record/record.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
 class AudioRecorder extends StatefulWidget {
-  final void Function(String path) onStop;
 
-  const AudioRecorder({Key? key, required this.onStop}) : super(key: key);
+  const AudioRecorder({Key? key}) : super(key: key);
 
   @override
   State<AudioRecorder> createState() => _AudioRecorderState();
@@ -59,7 +58,7 @@ Future<void> _start() async {
         
         // Get the app's directory
         final Directory appDir = await getApplicationDocumentsDirectory();
-        final String recordingsDirPath = '${appDir.path}/Recordings';
+        final String recordingsDirPath = '${appDir.path}';
         
         // Create a folder named 'Recordings' if it doesn't exist
         final Directory recordingsDir = Directory(recordingsDirPath);
@@ -103,10 +102,6 @@ Future<void> _start() async {
     wavPath = wavPath.replaceAll("file://", "");
     //override path
     path = wavPath;
-
-    if (path != null) {
-      widget.onStop(path);
-    }
   }
 
   Future<void> _pause() async {
@@ -121,24 +116,17 @@ Future<void> _start() async {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildText(),
-              _buildRecordStopControl(),
-              if (_recordState != RecordState.stop) ...[
-                const SizedBox(width: 20),
-                _buildPauseResumeControl(),
-              ]
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildText(),
+          _buildRecordStopControl(),
+          if (_recordState != RecordState.stop) ...[
+            const SizedBox(width: 20),
+            _buildPauseResumeControl(),
+          ]
+        ],
       ),
     );
   }
