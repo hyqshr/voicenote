@@ -38,7 +38,7 @@ class _AudioListState extends State<AudioList> {
 
   _fetchAudios() async {
     final appDir = await getApplicationDocumentsDirectory();
-    final recordingDir = Directory(path.join(appDir.path, 'Recordings'));
+    final recordingDir = Directory(path.join(appDir.path));
     if (await recordingDir.exists()) {
       final entities = recordingDir.listSync();
       for (var entity in entities) {
