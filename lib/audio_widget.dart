@@ -12,12 +12,14 @@ class AudioWidget extends StatefulWidget {
   /// Callback when audio file should be removed
   /// Setting this to null hides the delete button
   final VoidCallback onDelete;
+  final String? text;
 
   const AudioWidget({
     Key? key,
     required this.source,
     required this.onDelete,
-    required this.api,
+    required this.api, 
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class AudioPlayerState extends State<AudioWidget> {
   static const double _deleteBtnSize = 24;
 
   final _audioPlayer = ap.AudioPlayer();
-  List<String>? transcribedText;
+  String? transcribedText;
 
   late StreamSubscription<void> _playerStateChangedSubscription;
   late StreamSubscription<Duration?> _durationChangedSubscription;
@@ -39,6 +41,10 @@ class AudioPlayerState extends State<AudioWidget> {
 
   @override
   void initState() {
+    if (widget.text != null) {
+      debugPrint("Find existing text!!!: ${widget.text}");
+      transcribedText = widget.text;
+    }
     _playerStateChangedSubscription =
         _audioPlayer.onPlayerComplete.listen((state) async {
       await stop();
@@ -164,21 +170,25 @@ class AudioPlayerState extends State<AudioWidget> {
       ap.DeviceFileSource(widget.source),
     );
   }
+  
+  Future<void> _saveTranscribedTextToFile() async {
+    final baseFilePath = widget.source.replaceAll('.wav', '');
+    final filePath = '$baseFilePath.txt';
+    final file = File(filePath);
+    await file.writeAsString(transcribedText!);
+  }
 
   Widget _buildTranscribeButton() {
     return ElevatedButton(
         child: const Text("Transcribe text"),
-        onPressed: () => {
-              widget.api
-                  // language will default to 'en' if not provided but this is to show an example
-                  // you also need to make sure the model you have loaded for Whisper.cpp matches what you have provided for the language
-                  .runWhisperModel(path: widget.source, lang: 'en')
-                  .then((value) => {
-                        setState(() {
-                          transcribedText = value;
-                        })
-                      })
-            });
+        onPressed: () async {
+          final value = await widget.api.runWhisperModel(path: widget.source, lang: 'en');
+          setState(() {
+            transcribedText = value.join(" ");
+          });
+          await _saveTranscribedTextToFile();
+        }
+      );
   }
 
   Widget _buildTranscribedText() {
@@ -189,7 +199,7 @@ class AudioPlayerState extends State<AudioWidget> {
           child: Padding(
               padding: const EdgeInsets.only(top: 30),
               child: Text(
-                transcribedText!.join(" "),
+                transcribedText!,
               )));
     }
     return Container();

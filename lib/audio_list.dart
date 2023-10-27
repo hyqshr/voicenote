@@ -22,9 +22,9 @@ final api = RsWhisperGptImpl(dylib);
 
 
 class AudioList extends StatefulWidget {
-  final List<File> audioFiles;
+  final Map<File, String?> audioToTextMap;
 
-  AudioList({super.key, required this.audioFiles});
+  AudioList({Key? key, required this.audioToTextMap}) : super(key: key);
 
   @override
   _AudioListState createState() => _AudioListState();
@@ -32,7 +32,7 @@ class AudioList extends StatefulWidget {
 
 class _AudioListState extends State<AudioList> {
   final player = ap.AudioPlayer();
-
+  
   @override
   void initState() {
     super.initState();
@@ -42,7 +42,7 @@ class _AudioListState extends State<AudioList> {
     try {
       await file.delete();
       setState(() {
-        widget.audioFiles.remove(file);
+        widget.audioToTextMap.remove(file);
       });
     } catch (e) {
       print("Error deleting file: $e");
@@ -53,23 +53,24 @@ class _AudioListState extends State<AudioList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.audioFiles.length,
+      itemCount: widget.audioToTextMap.keys.length,
       itemBuilder: (context, index) {
+        var file = widget.audioToTextMap.keys.elementAt(index);
         return ExpansionTileCard(
-          title: Text(path.basenameWithoutExtension(widget.audioFiles[index].path)),
+          title: Text(path.basenameWithoutExtension(file.path)),
           children: <Widget>[
             AudioWidget(
-              source: widget.audioFiles[index].path, 
+              source: file.path, 
               api: api,
               onDelete: () {
-                  _deleteAudio(widget.audioFiles[index]);
-                  setState(() => ());
+                  _deleteAudio(file);
+                  setState(() {});
                 },
-              )
+              text: widget.audioToTextMap[file],
+            )
           ],
         );
       },
     );
   }
-
 }

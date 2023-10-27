@@ -16,22 +16,31 @@ class _HomeState extends State<Home> {
     super.initState();
     _fetchAudios();
   }
-  List<File> audioFiles = [];
+Map<File, String?> audioToTextMap = {};
 
-  _fetchAudios() async {
-    final appDir = await getApplicationDocumentsDirectory();
-    final recordingDir = Directory(path.join(appDir.path));
-    if (await recordingDir.exists()) {
-      final entities = recordingDir.listSync();
-      for (var entity in entities) {
-        if (entity is File && path.extension(entity.path) == '.wav') {
-          setState(() {
-            audioFiles.add(entity);
-          });
+_fetchAudios() async {
+  audioToTextMap.clear(); // Clear the map first
+
+  final appDir = await getApplicationDocumentsDirectory();
+  final recordingDir = Directory(path.join(appDir.path));
+  if (await recordingDir.exists()) {
+    final entities = recordingDir.listSync();
+    for (var entity in entities) {
+      if (entity is File && path.extension(entity.path) == '.wav') {
+        final txtFile = File(entity.path.replaceFirst('.wav', '.txt'));
+        String? txtContent;
+        if (await txtFile.exists()) {
+          txtContent = await txtFile.readAsString();
+        } else {
+          txtContent = null;
         }
+        setState(() {
+          audioToTextMap[entity] = txtContent;
+        });
       }
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +50,8 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end, 
           children: [
-            Expanded(child: AudioList(audioFiles: audioFiles)), 
+            Expanded(child: AudioList(audioToTextMap: audioToTextMap)), 
             AudioRecorder(onUpdate: (){
-              audioFiles.clear();
               setState(() {});
               _fetchAudios();
             },),
