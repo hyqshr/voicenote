@@ -11,12 +11,12 @@ class AudioWidget extends StatefulWidget {
   final RsWhisperGptImpl api;
   /// Callback when audio file should be removed
   /// Setting this to null hides the delete button
-  // final VoidCallback onDelete;
+  final VoidCallback onDelete;
 
   const AudioWidget({
     Key? key,
     required this.source,
-    // required this.onDelete,
+    required this.onDelete,
     required this.api,
   }) : super(key: key);
 
@@ -80,13 +80,13 @@ class AudioPlayerState extends State<AudioWidget> {
               children: <Widget>[
                 _buildControl(),
                 _buildSlider(constraints.maxWidth * 0.7),
-                // IconButton(
-                //   icon: const Icon(Icons.delete,
-                //       color: Color(0xFF73748D), size: _deleteBtnSize),
-                //   onPressed: () {
-                //     stop().then((value) => widget.onDelete());
-                //   },
-                // ),
+                IconButton(
+                  icon: const Icon(Icons.delete,
+                      color: Color(0xFF73748D), size: _deleteBtnSize),
+                  onPressed: () {
+                    stop().then((value) => widget.onDelete());
+                  },
+                ),
               ],
             ),
             _buildTranscribeButton(),

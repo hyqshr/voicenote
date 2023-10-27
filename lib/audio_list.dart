@@ -51,6 +51,18 @@ class _AudioListState extends State<AudioList> {
     }
   }
 
+  void _deleteAudio(File file) async {
+    try {
+      await file.delete();
+      setState(() {
+        audioFiles.remove(file);
+      });
+    } catch (e) {
+      print("Error deleting file: $e");
+      // You can also show a dialog or a snackbar to notify the user about the error
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -59,7 +71,14 @@ class _AudioListState extends State<AudioList> {
         return ExpansionTileCard(
           title: Text(path.basenameWithoutExtension(audioFiles[index].path)),
           children: <Widget>[
-            AudioWidget(source: audioFiles[index].path, api: api)
+            AudioWidget(
+              source: audioFiles[index].path, 
+              api: api,
+              onDelete: () {
+                  _deleteAudio(audioFiles[index]);
+                  setState(() => ());
+                },
+              )
           ],
         );
       },
