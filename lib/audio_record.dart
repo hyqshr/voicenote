@@ -121,18 +121,16 @@ Future<void> _start() async {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildText(),
-          _buildRecordStopControl(),
-          if (_recordState != RecordState.stop) ...[
-            const SizedBox(width: 20),
-            _buildPauseResumeControl(),
-          ]
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildText(),
+        _buildRecordStopControl(),
+        if (_recordState != RecordState.stop) ...[
+          const SizedBox(width: 20),
+          _buildPauseResumeControl(),
+        ]
+      ],
     );
   }
 
@@ -206,7 +204,7 @@ Future<void> _start() async {
       return _buildTimer();
     }
 
-    return const Text("Waiting to record");
+    return Container();
   }
 
   Widget _buildTimer() {

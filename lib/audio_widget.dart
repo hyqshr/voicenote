@@ -27,8 +27,8 @@ class AudioWidget extends StatefulWidget {
 }
 
 class AudioPlayerState extends State<AudioWidget> {
-  static const double _controlSize = 56;
-  static const double _deleteBtnSize = 24;
+  static const double _controlSize = 40;
+  static const double _deleteBtnSize = 20;
 
   final _audioPlayer = ap.AudioPlayer();
   String? transcribedText;
@@ -170,7 +170,7 @@ class AudioPlayerState extends State<AudioWidget> {
       ap.DeviceFileSource(widget.source),
     );
   }
-  
+
   Future<void> _saveTranscribedTextToFile() async {
     final baseFilePath = widget.source.replaceAll('.wav', '');
     final filePath = '$baseFilePath.txt';
@@ -179,25 +179,31 @@ class AudioPlayerState extends State<AudioWidget> {
   }
 
   Widget _buildTranscribeButton() {
-    return ElevatedButton(
-        child: const Text("Transcribe text"),
-        onPressed: () async {
-          final value = await widget.api.runWhisperModel(path: widget.source, lang: 'en');
-          setState(() {
-            transcribedText = value.join(" ");
-          });
-          await _saveTranscribedTextToFile();
-        }
+    if (transcribedText == null) {
+      return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ElevatedButton(
+          child: const Text("Transcribe text"),
+          onPressed: () async {
+            final value = await widget.api.runWhisperModel(path: widget.source, lang: 'en');
+            setState(() {
+              transcribedText = value.join(" ");
+            });
+            await _saveTranscribedTextToFile();
+          }
+        ),
       );
+    };
+    return Container();
   }
 
   Widget _buildTranscribedText() {
     if (transcribedText != null) {
       return FractionallySizedBox(
-          widthFactor: 1 / 2,
+          widthFactor: 2 / 3,
           alignment: Alignment.center,
           child: Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.all(10),
               child: Text(
                 transcribedText!,
               )));
