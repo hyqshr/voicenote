@@ -61,7 +61,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final ThemeData themeData = ThemeData(
+    useMaterial3: true,
+    brightness: isDarkMode ? Brightness.dark : Brightness.light);
+
+    return MaterialApp(
+      theme: themeData,
+      home: Scaffold(
       appBar: AppBar(title: Text("Voice Notes"),),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start, 
@@ -80,6 +86,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+    ),
     );
   }
 }
