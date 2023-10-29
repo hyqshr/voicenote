@@ -44,6 +44,7 @@ class _HomeState extends State<Home> {
         }
       }
     }
+    print(audioToTextMap.length.toString() + " audio files found");
   }
 
   _toggleDarkMode(){
@@ -59,39 +60,53 @@ class _HomeState extends State<Home> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData themeData = ThemeData(
+@override
+Widget build(BuildContext context) {
+  final ThemeData themeData = ThemeData(
     useMaterial3: true,
-    brightness: isDarkMode ? Brightness.dark : Brightness.light);
+    brightness: isDarkMode ? Brightness.dark : Brightness.light,
+  );
+  // Define the text color based on the theme's brightness
+  Color textColor = isDarkMode ? Colors.white : Colors.black;
 
-    return MaterialApp(
-      theme: themeData,
-      home: Scaffold(
-      appBar: AppBar(title: Text("Voice Notes"),),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start, 
-        children: [
-          SearchBarApp(
-            toggleDarkMode: _toggleDarkMode,
-            setPrompt: _setPrompt,
-          ),
-          Expanded(child: AudioList(audioToTextMap: audioToTextMap)), 
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 12.0,
-              top: 12.0,
-              right: 12.0,
-              bottom: 24.0,  // Increased padding at the bottom
+  return MaterialApp(
+    theme: themeData,
+    home: Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+           SliverAppBar(
+            pinned: true, // This ensures the app bar remains visible as you scroll.
+            expandedHeight: 100.0, // This is the height when the app bar is fully expanded.
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text("Voice Notes", style: TextStyle(color: textColor),),
+              // background: FlutterLogo(), // You can change this to any other widget or image.
             ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                SearchBarApp(
+                  toggleDarkMode: _toggleDarkMode,
+                  setPrompt: _setPrompt,
+                ),
+                
+                AudioList(audioToTextMap: audioToTextMap), 
+                
+              ]
+            ),
+          ),
+        ],
+        
+      ),
+          bottomNavigationBar: BottomAppBar(
             child: AudioRecorder(onUpdate: (){
               setState(() {});
               _fetchAudios();
-            },),
-          ),
-        ],
-      ),
+            },
+                ),
+          )
     ),
-    );
-  }
+  );
+}
+
 }

@@ -47,27 +47,27 @@ class _AudioListState extends State<AudioList> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.audioToTextMap.keys.length,
-      itemBuilder: (context, index) {
-        var file = widget.audioToTextMap.keys.elementAt(index);
+@override
+Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    child: Column(
+      children: widget.audioToTextMap.keys.map((file) {
         return ExpansionTileCard(
           title: Text(path.basenameWithoutExtension(file.path)),
           children: <Widget>[
             AudioWidget(
-              source: file.path, 
+              source: file.path,
               api: api,
               onDelete: () {
-                  _deleteAudio(file);
-                  setState(() {});
-                },
+                _deleteAudio(file);
+                setState(() {});
+              },
               text: widget.audioToTextMap[file],
             )
           ],
         );
-      },
-    );
-  }
+      }).toList(),
+    ),
+  );
+}
 }

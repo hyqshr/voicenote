@@ -87,7 +87,7 @@ Future<void> _start() async {
 
   Future<String> _getNextAvailableFileName(String recordingsDirPath) async {
     int i = 1;
-    while (await File('$recordingsDirPath/New_Recording_$i.m4a').exists()) {
+    while (await File('$recordingsDirPath/New_Recording_$i.wav').exists()) {
       i++;
     }
     return 'New_Recording_$i';
@@ -162,16 +162,18 @@ Future<void> _start() async {
       icon = Icon(Icons.brightness_1_outlined, color: Color.fromARGB(255, 96, 200, 248), size: 65);
     }
 
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          child: icon,
-          onTap: () {
-            (_recordState != RecordState.stop) ? _stop() : _start();
-          },
+    return Row(
+      children: [
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            child: icon,
+            onTap: () {
+              (_recordState != RecordState.stop) ? _stop() : _start();
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -189,17 +191,18 @@ Future<void> _start() async {
       final theme = Theme.of(context);
       icon = const Icon(Icons.play_arrow, color: Colors.red, size: 65);
     }
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          child: SizedBox(width: 65, height: 65, child: icon),
-          onTap: () {
-            (_recordState == RecordState.pause) ? _resume() : _pause();
-          },
+    return Row(
+      children: [
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            child: SizedBox(width: 65, height: 65, child: icon),
+            onTap: () {
+              (_recordState == RecordState.pause) ? _resume() : _pause();
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 
