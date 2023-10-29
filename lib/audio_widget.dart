@@ -60,7 +60,7 @@ class AudioPlayerState extends State<AudioWidget> {
         _duration = duration;
       }),
     );
-
+    // debugPrint(await _audioPlayer.getDuration().toString());
     super.initState();
   }
 

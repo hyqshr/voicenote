@@ -93,6 +93,15 @@ Future<void> _start() async {
     return 'New_Recording_$i';
   }
 
+  void deleteFile(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      await file.delete();
+      print('File deleted successfully');
+    } else {
+      print('File does not exist');
+    }
+  }
 
   Future<void> _stop() async {
     _timer?.cancel();
@@ -102,6 +111,7 @@ Future<void> _start() async {
     debugPrint("path!: $path");
     String wavPath = path!.replaceAll(".m4a", ".wav");
     await convertMp4ToWav(path, wavPath);
+    deleteFile(path);
 
     wavPath = wavPath.replaceAll("file://", "");
     //override path
@@ -127,7 +137,6 @@ Future<void> _start() async {
         _buildText(),
         _buildRecordStopControl(),
         if (_recordState != RecordState.stop) ...[
-          const SizedBox(width: 20),
           _buildPauseResumeControl(),
         ]
       ],
@@ -148,19 +157,16 @@ Future<void> _start() async {
     late Color color;
 
     if (_recordState != RecordState.stop) {
-      icon = const Icon(Icons.stop, color: Colors.red, size: 30);
-      color = Colors.red.withOpacity(0.1);
+      icon = const Icon(Icons.stop_outlined, color: Color.fromARGB(255, 96, 200, 248), size: 65);
     } else {
-      final theme = Theme.of(context);
-      icon = Icon(Icons.mic, color: theme.primaryColor, size: 30);
-      color = theme.primaryColor.withOpacity(0.1);
+      icon = Icon(Icons.brightness_1_outlined, color: Color.fromARGB(255, 96, 200, 248), size: 65);
     }
 
     return ClipOval(
       child: Material(
-        color: color,
+        color: Colors.transparent,
         child: InkWell(
-          child: SizedBox(width: 56, height: 56, child: icon),
+          child: icon,
           onTap: () {
             (_recordState != RecordState.stop) ? _stop() : _start();
           },
@@ -178,19 +184,17 @@ Future<void> _start() async {
     late Color color;
 
     if (_recordState == RecordState.record) {
-      icon = const Icon(Icons.pause, color: Colors.red, size: 30);
-      color = Colors.red.withOpacity(0.1);
+      icon = const Icon(Icons.pause, color: Colors.red, size: 65);
     } else {
       final theme = Theme.of(context);
-      icon = const Icon(Icons.play_arrow, color: Colors.red, size: 30);
-      color = theme.primaryColor.withOpacity(0.1);
+      icon = const Icon(Icons.play_arrow, color: Colors.red, size: 65);
     }
 
     return ClipOval(
       child: Material(
-        color: color,
+        color: Colors.transparent,
         child: InkWell(
-          child: SizedBox(width: 56, height: 56, child: icon),
+          child: SizedBox(width: 65, height: 65, child: icon),
           onTap: () {
             (_recordState == RecordState.pause) ? _resume() : _pause();
           },

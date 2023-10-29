@@ -78,7 +78,12 @@ class _HomeState extends State<Home> {
           ),
           Expanded(child: AudioList(audioToTextMap: audioToTextMap)), 
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.only(
+              left: 12.0,
+              top: 12.0,
+              right: 12.0,
+              bottom: 24.0,  // Increased padding at the bottom
+            ),
             child: AudioRecorder(onUpdate: (){
               setState(() {});
               _fetchAudios();

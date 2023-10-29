@@ -1,11 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'dart:ffi';
-import 'dart:io';
-import "audio_record.dart";
 import 'package:whisper_gpt/bridge_generated.dart';
 import 'package:audioplayers/audioplayers.dart' as ap;
 import 'audio_widget.dart';
