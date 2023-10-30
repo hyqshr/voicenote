@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:path_provider/path_provider.dart'; // Import the path_provider package
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart' as ap;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:whisper_gpt/bridge_generated.dart';
-
+import 'text_editor.dart';
+import 'util.dart';
 class AudioWidget extends StatefulWidget {
   final String source;
   final RsWhisperGptImpl api;
@@ -43,6 +43,7 @@ class AudioPlayerState extends State<AudioWidget> {
   void initState() {
     if (widget.text != null) {
       debugPrint("Find existing text!!!: ${widget.text}");
+      debugPrint("source!!!: ${widget.source}");
       transcribedText = widget.text;
     }
     _playerStateChangedSubscription =
@@ -172,10 +173,11 @@ class AudioPlayerState extends State<AudioWidget> {
   }
 
   Future<void> _saveTranscribedTextToFile() async {
-    final baseFilePath = widget.source.replaceAll('.wav', '');
-    final filePath = '$baseFilePath.txt';
-    final file = File(filePath);
-    await file.writeAsString(transcribedText!);
+    final baseFilePath = widget.source.replaceAll('.wav', '.json');
+    final file = File(baseFilePath);
+    String jsonTring = '[{"insert":"${transcribedText!.trim()}\\n"}]';
+    debugPrint("saving to $jsonTring -- $baseFilePath");
+    await file.writeAsString(jsonTring);
   }
 
   Widget _buildTranscribeButton() {
@@ -200,16 +202,31 @@ class AudioPlayerState extends State<AudioWidget> {
   Widget _buildTranscribedText() {
     if (transcribedText != null) {
       return FractionallySizedBox(
-          widthFactor: 2 / 3,
-          alignment: Alignment.center,
-          child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                transcribedText!,
-              )));
+        widthFactor: 2 / 3,
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuillEditorWidget(
+                    source: fileWithDiffExtension(widget.source, '.json'),
+                  ),
+                ),
+              );
+            },
+            child: Text(
+              transcribedText!,
+            ),
+          ),
+        ),
+      );
     }
     return Container();
   }
+
 
   Future<void> pause() => _audioPlayer.pause();
 

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 
 import 'searchbar.dart';
+import 'util.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -31,15 +32,17 @@ class _HomeState extends State<Home> {
       final entities = recordingDir.listSync();
       for (var entity in entities) {
         if (entity is File && path.extension(entity.path) == '.wav') {
-          final txtFile = File(entity.path.replaceFirst('.wav', '.txt'));
-          String? txtContent;
-          if (await txtFile.exists()) {
-            txtContent = await txtFile.readAsString();
+          final jsonFile = File(entity.path.replaceFirst('.wav', '.json'));
+          String? previewContent;
+          if (await jsonFile.exists()) {
+            String jsonString = await jsonFile.readAsString();
+            previewContent = getPreviewFromJson(jsonString);
+            debugPrint("Preview content: $previewContent");
           } else {
-            txtContent = null;
+            previewContent = null;
           }
           setState(() {
-            audioToTextMap[entity] = txtContent;
+            audioToTextMap[entity] = previewContent;
           });
         }
       }
@@ -103,7 +106,7 @@ Widget build(BuildContext context) {
               setState(() {});
               _fetchAudios();
             },
-                ),
+            ),
           )
     ),
   );

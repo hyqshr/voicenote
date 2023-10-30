@@ -19,6 +19,7 @@ dependencies:
   ffmpeg_kit_flutter: ^5.1.0
   ffi: ^2.1.0
   expansion_tile_card: ^3.0.0
+  flutter_quill: ^7.4.7
 
 dev_dependencies:
   flutter_test:

@@ -6,6 +6,7 @@ import 'dart:ffi';
 import 'package:whisper_gpt/bridge_generated.dart';
 import 'package:audioplayers/audioplayers.dart' as ap;
 import 'audio_widget.dart';
+import 'util.dart';
 
 const base = 'rs_whisper_gpt';
 final lib_path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
@@ -36,38 +37,85 @@ class _AudioListState extends State<AudioList> {
   }
 
   void _deleteAudio(File file) async {
-    try {
-      await file.delete();
-      setState(() {
-        widget.audioToTextMap.remove(file);
-      });
-    } catch (e) {
-      print("Error deleting file: $e");
-      // You can also show a dialog or a snackbar to notify the user about the error
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Confirmation'),
+          content: const Text('Are you sure you want to delete this file?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                try {
+                  await file.delete();
+                  File quillJsonFile = File(fileWithDiffExtension(file.path, '.json'));
+                  await quillJsonFile.delete();
+                  setState(() {
+                    widget.audioToTextMap.remove(file);
+                  });
+                } catch (e) {
+                  print("Error deleting file: $e");
+                  // You can also show a dialog or a snackbar to notify the user about the error
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Widget PlaceHolder(){
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Text(
+          "🎤 Silence is golden, but voice notes are platinum! Tap to record and make your thoughts heard. Remember, you can always edit later. Speak on! 📝",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.audioToTextMap.isEmpty) {
+      return PlaceHolder();
+    } else {
+      return SingleChildScrollView(
+        child: Column(
+          children: widget.audioToTextMap.keys.map((file) {
+            return ExpansionTileCard(
+              title: Text(path.basenameWithoutExtension(file.path)),
+              children: <Widget>[
+                AudioWidget(
+                  source: file.path,
+                  api: api,
+                  onDelete: () {
+                    _deleteAudio(file);
+                    setState(() {});
+                  },
+                  text: widget.audioToTextMap[file],
+                )
+              ],
+            );
+          }).toList(),
+        ),
+      );
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return SingleChildScrollView(
-    child: Column(
-      children: widget.audioToTextMap.keys.map((file) {
-        return ExpansionTileCard(
-          title: Text(path.basenameWithoutExtension(file.path)),
-          children: <Widget>[
-            AudioWidget(
-              source: file.path,
-              api: api,
-              onDelete: () {
-                _deleteAudio(file);
-                setState(() {});
-              },
-              text: widget.audioToTextMap[file],
-            )
-          ],
-        );
-      }).toList(),
-    ),
-  );
-}
 }
