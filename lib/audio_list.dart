@@ -7,6 +7,7 @@ import 'package:whisper_gpt/bridge_generated.dart';
 import 'package:audioplayers/audioplayers.dart' as ap;
 import 'audio_widget.dart';
 import 'util.dart';
+import 'package:lottie/lottie.dart';
 
 const base = 'rs_whisper_gpt';
 final lib_path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
@@ -75,16 +76,21 @@ class _AudioListState extends State<AudioList> {
 
   // ignore: non_constant_identifier_names
   Widget PlaceHolder(){
-    return const Center(
+    return Center(
       child: Padding(
         padding: EdgeInsets.all(20.0),
-        child: Text(
-          "🎤 Silence is golden, but voice notes are platinum! Tap to record and make your thoughts heard. Remember, you can always edit later. Speak on! 📝",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Column(
+          children: [
+            Text(
+              "🎤 Silence is golden, but voice notes are platinum! Tap to record and make your thoughts heard. Remember, you can always edit later. Speak on! 📝",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Lottie.asset('assets/waveform_light.json'),
+          ],
         ),
       ),
     );

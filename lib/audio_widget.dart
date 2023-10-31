@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:whisper_gpt/bridge_generated.dart';
 import 'text_editor.dart';
 import 'util.dart';
+
 class AudioWidget extends StatefulWidget {
   final String source;
   final RsWhisperGptImpl api;
