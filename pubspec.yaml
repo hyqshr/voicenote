@@ -21,6 +21,7 @@ dependencies:
   expansion_tile_card: ^3.0.0
   flutter_quill: ^7.4.7
   lottie: ^2.7.0
+  share_plus: ^7.2.1
 
 dev_dependencies:
   flutter_test:

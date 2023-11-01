@@ -168,6 +168,7 @@ class _AudioListState extends State<AudioList> {
                   api: api,
                   onDelete: () {
                     _deleteAudio(file);
+                    widget.onRefresh();
                     setState(() {});
                   },
                   text: widget.audioToTextMap[file],

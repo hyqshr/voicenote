@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:whisper_gpt/bridge_generated.dart';
 import 'text_editor.dart';
 import 'util.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AudioWidget extends StatefulWidget {
   final String source;
   final RsWhisperGptImpl api;
-  /// Callback when audio file should be removed
-  /// Setting this to null hides the delete button
   final VoidCallback onDelete;
   final String? text;
 
@@ -99,6 +98,16 @@ class AudioPlayerState extends State<AudioWidget> {
             ),
             _buildTranscribeButton(),
             _buildTranscribedText(),
+            IconButton(
+                icon: const Icon(Icons.share, color: Colors.lightBlue, size: _deleteBtnSize),
+                onPressed: () async {
+                    try {
+                    await Share.shareFiles([widget.source], mimeTypes: ["audio/wav"]);
+                  } catch (e) {
+                    print('Error while sharing audio: $e');
+                  }
+                },
+              ),
           ],
         );
       },
