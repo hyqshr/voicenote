@@ -75,6 +75,7 @@ class _HomeState extends State<Home> {
   }
   Future<void> _onRefresh() async {
     await _fetchAudios();
+    setState(() {});
   }
 
 @override
@@ -109,7 +110,10 @@ Widget build(BuildContext context) {
                     setPrompt: _setPrompt,
                   ),
                   // if searchbar is not empty, show filtered list
-                  AudioList(audioToTextMap: prompt !='' ? filterMap: audioToTextMap), 
+                  AudioList(
+                    audioToTextMap: prompt !='' ? filterMap: audioToTextMap,
+                    onRefresh: _onRefresh,
+                    ), 
                   
                 ]
               ),

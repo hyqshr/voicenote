@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'dart:convert';
 
@@ -53,6 +54,29 @@ String getPreviewFromJson(String jsonString) {
     }
   }
   return "";
+}
+
+Future<void>  renameAllFilesWithBaseName(String path, String newBaseName) async {
+  // Getting the directory of the given path
+  Directory dir = Directory(path).parent;
+
+  // Checking if the directory exists
+  if (await dir.exists()) {
+    // Listing all files in the directory
+    await for (FileSystemEntity entity in dir.list()) {
+      if (entity is File) {
+        String fileExtension = entity.uri.pathSegments.last.split('.').last;
+        String newFileName = '$newBaseName.$fileExtension';
+        File newFile = File('${dir.path}/$newFileName');
+
+        // Renaming the file
+        await entity.rename(newFile.path);
+        print('File renamed to: $newFileName');
+      }
+    }
+  } else {
+    print('Directory does not exist.');
+  }
 }
 
 

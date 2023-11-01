@@ -22,8 +22,13 @@ final api = RsWhisperGptImpl(dylib);
 
 class AudioList extends StatefulWidget {
   final Map<File, String?> audioToTextMap;
+  final Function onRefresh;
 
-  AudioList({Key? key, required this.audioToTextMap}) : super(key: key);
+  AudioList({
+    Key? key, 
+    required this.audioToTextMap,
+    required this.onRefresh,
+  }) : super(key: key);
 
   @override
   _AudioListState createState() => _AudioListState();
@@ -31,10 +36,17 @@ class AudioList extends StatefulWidget {
 
 class _AudioListState extends State<AudioList> {
   final player = ap.AudioPlayer();
-  
+  final TextEditingController _renameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _renameController.dispose();
+    super.dispose();
   }
 
   void _deleteAudio(File file) async {
@@ -58,10 +70,13 @@ class _AudioListState extends State<AudioList> {
                 try {
                   await file.delete();
                   File quillJsonFile = File(fileWithDiffExtension(file.path, '.json'));
-                  await quillJsonFile.delete();
+                  if (await quillJsonFile.exists()) {
+                    await quillJsonFile.delete();
+                  }
                   setState(() {
                     widget.audioToTextMap.remove(file);
                   });
+                  widget.onRefresh();
                 } catch (e) {
                   print("Error deleting file: $e");
                   // You can also show a dialog or a snackbar to notify the user about the error
@@ -99,8 +114,38 @@ class _AudioListState extends State<AudioList> {
       ),
     );
   }
-  void _renameFile(File file) {
-    debugPrint("rename file");
+
+  void _renamePopupDialog(File file) {
+    _renameController.text = path.basenameWithoutExtension(file.path);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Rename File'),
+          content: TextField(
+            controller: _renameController,
+            decoration: const InputDecoration(hintText: 'Enter new file name'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                debugPrint('New file name: ${_renameController.text}');
+                await renameAllFilesWithBaseName(file.path, _renameController.text);
+                widget.onRefresh();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Rename'),
+            ),
+          ],
+        );
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -113,8 +158,7 @@ class _AudioListState extends State<AudioList> {
             return ExpansionTileCard(
               title: GestureDetector(
                 onLongPress: () {
-                  // Call your function to rename the file here
-                  _renameFile(file);
+                  _renamePopupDialog(file);
                 },
                 child: Text(path.basenameWithoutExtension(file.path)),
               ),
