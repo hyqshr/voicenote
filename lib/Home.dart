@@ -16,13 +16,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool isDarkMode = false;
   String prompt = "";
+  Map<File, String?> audioToTextMap = {};
+  Map<File, String?> filterMap = {};
 
   @override
   void initState() {
     super.initState();
     _fetchAudios();
   }
-  Map<File, String?> audioToTextMap = {};
 
   _fetchAudios() async {
     audioToTextMap.clear(); // Clear the map first
@@ -58,9 +59,19 @@ class _HomeState extends State<Home> {
   }
 
   _setPrompt(String prompt){
+    Map<File, String?> filteredMap = Map.fromEntries(
+      audioToTextMap.entries.where((entry) {
+        String fileName = entry.key.uri.pathSegments.last;
+        String? fileContent = entry.value;
+        return fileName.contains(prompt) || (fileContent?.contains(prompt) ?? false);
+      }),
+    );
     setState(() {
       this.prompt = prompt;
+      filterMap = filteredMap;
     });
+    // print("filterPrompt: $filteredMap");
+
   }
   Future<void> _onRefresh() async {
     await _fetchAudios();
@@ -97,8 +108,8 @@ Widget build(BuildContext context) {
                     toggleDarkMode: _toggleDarkMode,
                     setPrompt: _setPrompt,
                   ),
-                  
-                  AudioList(audioToTextMap: audioToTextMap), 
+                  // if searchbar is not empty, show filtered list
+                  AudioList(audioToTextMap: prompt !='' ? filterMap: audioToTextMap), 
                   
                 ]
               ),

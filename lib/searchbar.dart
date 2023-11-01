@@ -32,10 +32,10 @@ class _SearchBarAppState extends State<SearchBarApp> {
             padding: const MaterialStatePropertyAll<EdgeInsets>(
                 EdgeInsets.symmetric(horizontal: 16.0)),
             onTap: () {
-              controller.openView();
+              // controller.openView();
             },
             onChanged: (prompt) {
-              controller.openView();
+              // controller.openView();
               widget.setPrompt(prompt); // Call the OnPromptChanged callback here
             },
             leading: const Icon(Icons.search),

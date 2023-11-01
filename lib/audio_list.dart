@@ -99,7 +99,9 @@ class _AudioListState extends State<AudioList> {
       ),
     );
   }
-
+  void _renameFile(File file) {
+    debugPrint("rename file");
+  }
   @override
   Widget build(BuildContext context) {
     if (widget.audioToTextMap.isEmpty) {
@@ -109,7 +111,13 @@ class _AudioListState extends State<AudioList> {
         child: Column(
           children: widget.audioToTextMap.keys.map((file) {
             return ExpansionTileCard(
-              title: Text(path.basenameWithoutExtension(file.path)),
+              title: GestureDetector(
+                onLongPress: () {
+                  // Call your function to rename the file here
+                  _renameFile(file);
+                },
+                child: Text(path.basenameWithoutExtension(file.path)),
+              ),
               children: <Widget>[
                 AudioWidget(
                   source: file.path,
