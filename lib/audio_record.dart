@@ -220,7 +220,9 @@ Future<void> _start() async {
 
     return Text(
       '$minutes : $seconds',
-      style: const TextStyle(color: Colors.red),
+      style: const TextStyle(
+        fontSize: 24.0, 
+      ),
     );
   }
 

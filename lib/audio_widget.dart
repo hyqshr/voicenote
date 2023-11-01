@@ -186,7 +186,7 @@ class AudioPlayerState extends State<AudioWidget> {
       return Padding(
         padding: const EdgeInsets.all(10.0),
         child: ElevatedButton(
-          child: const Text("Transcribe text"),
+          child: const Text("Speech to Text"),
           onPressed: () async {
             final value = await widget.api.runWhisperModel(path: widget.source, lang: 'en');
             setState(() {

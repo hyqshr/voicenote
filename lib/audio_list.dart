@@ -81,15 +81,19 @@ class _AudioListState extends State<AudioList> {
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Text(
-              "🎤 Silence is golden, but voice notes are platinum! Tap to record and make your thoughts heard. Remember, you can always edit later. Speak on! 📝",
+            const Text(
+              "🎤 Silence is golden, but voice notes are platinum! Tap to record and make your thoughts heard. ",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w200,
               ),
             ),
-            Lottie.asset('assets/waveform_light.json'),
+            Lottie.asset(
+              'assets/waveform_light.json',
+              width: 70,
+              height: 70,
+              ),
           ],
         ),
       ),
@@ -117,6 +121,7 @@ class _AudioListState extends State<AudioList> {
                   text: widget.audioToTextMap[file],
                 )
               ],
+              animateTrailing: true,
             );
           }).toList(),
         ),

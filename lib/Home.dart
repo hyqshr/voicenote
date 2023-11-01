@@ -62,6 +62,9 @@ class _HomeState extends State<Home> {
       this.prompt = prompt;
     });
   }
+  Future<void> _onRefresh() async {
+    await _fetchAudios();
+  }
 
 @override
 Widget build(BuildContext context) {
@@ -75,41 +78,44 @@ Widget build(BuildContext context) {
   return MaterialApp(
     theme: themeData,
     home: Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-           SliverAppBar(
-            pinned: true, // This ensures the app bar remains visible as you scroll.
-            expandedHeight: 100.0, // This is the height when the app bar is fully expanded.
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text("Voice Notes", style: TextStyle(color: textColor),),
-              // background: FlutterLogo(), // You can change this to any other widget or image.
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: CustomScrollView(
+          slivers: <Widget>[
+             SliverAppBar(
+              pinned: true, // This ensures the app bar remains visible as you scroll.
+              expandedHeight: 100.0, // This is the height when the app bar is fully expanded.
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text("Voice Notes", style: TextStyle(color: textColor),),
+                // background: FlutterLogo(), // You can change this to any other widget or image.
+              ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                SearchBarApp(
-                  toggleDarkMode: _toggleDarkMode,
-                  setPrompt: _setPrompt,
-                ),
-                
-                AudioList(audioToTextMap: audioToTextMap), 
-                
-              ]
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  SearchBarApp(
+                    toggleDarkMode: _toggleDarkMode,
+                    setPrompt: _setPrompt,
+                  ),
+                  
+                  AudioList(audioToTextMap: audioToTextMap), 
+                  
+                ]
+              ),
             ),
+          ],
+          
           ),
-        ],
-        
-      ),
-          bottomNavigationBar: BottomAppBar(
-            child: AudioRecorder(onUpdate: (){
-              setState(() {});
-              _fetchAudios();
-            },
+        ),
+            bottomNavigationBar: BottomAppBar(
+              child: AudioRecorder(onUpdate: (){
+                setState(() {});
+                _fetchAudios();
+              },
             ),
           )
-    ),
-  );
-}
+      ),
+    );
+  }
 
 }
