@@ -123,7 +123,7 @@ class AudioPlayerState extends State<AudioWidget> {
       color = Colors.red.withOpacity(0.1);
     } else {
       final theme = Theme.of(context);
-      icon = Icon(Icons.play_arrow, color: theme.primaryColor, size: 30);
+      icon = Icon(Icons.play_arrow, color: theme.brightness== Brightness.light? theme.primaryColor: Colors.grey, size: 30);
       color = theme.primaryColor.withOpacity(0.1);
     }
 
@@ -161,7 +161,7 @@ class AudioPlayerState extends State<AudioWidget> {
     return SizedBox(
       width: width,
       child: Slider(
-        activeColor: Theme.of(context).primaryColor,
+        activeColor: Theme.of(context).brightness== Brightness.light? Theme.of(context).primaryColor: Colors.grey,
         inactiveColor: Theme.of(context).colorScheme.secondary,
         onChanged: (v) {
           if (duration != null) {

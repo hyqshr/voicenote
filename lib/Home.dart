@@ -4,7 +4,7 @@ import 'audio_list.dart';
 import 'package:path_provider/path_provider.dart'; // Import the path_provider package
 import 'dart:io';
 import 'package:path/path.dart' as path;
-
+import 'purchase/purchase.dart';
 import 'searchbar.dart';
 import 'util.dart';
 
@@ -94,13 +94,27 @@ Widget build(BuildContext context) {
         onRefresh: _onRefresh,
         child: CustomScrollView(
           slivers: <Widget>[
-             SliverAppBar(
-              pinned: true, // This ensures the app bar remains visible as you scroll.
-              expandedHeight: 100.0, // This is the height when the app bar is fully expanded.
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 100.0,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Voice Notes", style: TextStyle(color: textColor),),
-                // background: FlutterLogo(), // You can change this to any other widget or image.
+                title: Text("Voice Notes", style: TextStyle(color: textColor, fontWeight: FontWeight.bold,)),
               ),
+              // actions: <Widget>[
+              //   Builder(
+              //     builder: (BuildContext context) {
+              //       return IconButton(
+              //         icon: Icon(Icons.person, color: Colors.blue),
+              //         onPressed: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(builder: (context) => Purchase()),
+              //           );
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ],
             ),
             SliverList(
               delegate: SliverChildListDelegate(
