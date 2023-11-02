@@ -51,10 +51,10 @@ fn run_whisper_audio_to_text(ctx: WhisperContext, samples: Vec<f32>, lang: Optio
     // here we set the number of threads to use to 1
     params.set_n_threads(1);
     // we also enable translation
-    params.set_translate(true);
+    params.set_translate(false);
     // and set the language to translate
     // default to english, try to unwrap if provided
-    let lang_code = &lang.unwrap_or("en".to_string());
+    let lang_code = &lang.unwrap_or("auto".to_string());
     params.set_language(Some(&lang_code));
     // we also explicitly disable anything that prints to stdout
     params.set_print_special(false);
@@ -90,7 +90,7 @@ pub fn run_whisper_model(path: String, lang: Option<String>) -> Vec<String> {
             panic!("expected a file at {:?}", audio_path);
         }
         // Load Base Model Weights
-        let base_model = get_resources_dir().join("ggml-base.en.bin");
+        let base_model = get_resources_dir().join("ggml-base.bin");
         let whisper_path = Path::new(&base_model);
         if !whisper_path.exists() && !whisper_path.is_file() {
             panic!("expected a whisper directory")

@@ -49,7 +49,7 @@ class _AudioListState extends State<AudioList> {
     super.dispose();
   }
 
-  void _deleteAudio(File file) async {
+  _deleteAudio(File file) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -166,10 +166,9 @@ class _AudioListState extends State<AudioList> {
                 AudioWidget(
                   source: file.path,
                   api: api,
-                  onDelete: () {
-                    _deleteAudio(file);
-                    widget.onRefresh();
-                    setState(() {});
+                  onDelete: ()async {
+                    await _deleteAudio(file);
+                    await widget.onRefresh();
                   },
                   text: widget.audioToTextMap[file],
                 )
