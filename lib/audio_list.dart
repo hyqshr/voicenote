@@ -147,6 +147,7 @@ class _AudioListState extends State<AudioList> {
       },
     );
   }
+  
   @override
   Widget build(BuildContext context) {
     if (widget.audioToTextMap.isEmpty) {
@@ -156,29 +157,42 @@ class _AudioListState extends State<AudioList> {
         child: Column(
           children: widget.audioToTextMap.keys.map((file) {
             return ExpansionTileCard(
+              animateTrailing: false,
               title: GestureDetector(
                 onLongPress: () {
                   _renamePopupDialog(file);
                 },
                 child: Text(path.basenameWithoutExtension(file.path)),
               ),
+              trailing: FutureBuilder<String>(
+                future: getFileCreationDate(file.path),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error');
+                  } else {
+                    return Text(snapshot.data ?? 'Unknown Date');
+                  }
+                },
+              ),
               children: <Widget>[
                 AudioWidget(
                   source: file.path,
                   api: api,
-                  onDelete: ()async {
+                  onDelete: () async {
                     await _deleteAudio(file);
                     await widget.onRefresh();
                   },
                   text: widget.audioToTextMap[file],
                 )
               ],
-              animateTrailing: true,
             );
           }).toList(),
         ),
       );
     }
   }
+
 
 }

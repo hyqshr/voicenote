@@ -4,7 +4,6 @@ import 'audio_list.dart';
 import 'package:path_provider/path_provider.dart'; // Import the path_provider package
 import 'dart:io';
 import 'package:path/path.dart' as path;
-import 'purchase/purchase.dart';
 import 'searchbar.dart';
 import 'util.dart';
 
@@ -74,6 +73,7 @@ class _HomeState extends State<Home> {
 
   }
   Future<void> _onRefresh() async {
+    debugPrint("Refresh");
     await _fetchAudios();
     setState(() {});
   }

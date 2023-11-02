@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 bool doesFileWithDifferentExtensionExist(String path, String newExtension) {
   // Get the directory of the file
@@ -79,4 +79,22 @@ Future<void>  renameAllFilesWithBaseName(String path, String newBaseName) async 
   }
 }
 
+Future<String> getFileCreationDate(String filePath) async {
+  File file = File(filePath);
 
+  try {
+    // Get the file's stat
+    FileStat fileStat = await file.stat();
+
+    // Get the creation date
+    DateTime creationDate = fileStat.modified;
+
+    // Format the date
+    String formattedDate = DateFormat('MMM d').format(creationDate);
+
+    return formattedDate;
+  } catch (e) {
+    print('Error getting file creation date: $e');
+    return 'Unknown Date';
+  }
+}
