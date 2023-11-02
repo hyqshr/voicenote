@@ -29,6 +29,7 @@
 		7618F2E92A560F1C00285FE4 /* librs_whisper_gpt_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7618F2D02A55B71100285FE4 /* librs_whisper_gpt_static.a */; };
 		7618F2FD2A561B3C00285FE4 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7618F2FB2A561B3C00285FE4 /* Accelerate.framework */; };
 		7618F3012A561B8600285FE4 /* ggml-base.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 7618F2FF2A561B8600285FE4 /* ggml-base.en.bin */; };
+		A4E803ED8798E2D921EE0F8C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 50AB6AA4C3C73F7099515BBF /* GoogleService-Info.plist */; };
 		EC8FCE00D2B70B70E2636968 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90C914FEAFCC7CE0F692389A /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		33E51913231747F40026EE4D /* DebugProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DebugProfile.entitlements; sourceTree = "<group>"; };
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
+		50AB6AA4C3C73F7099515BBF /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7618F2CA2A55B71100285FE4 /* rs_whisper_gpt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = rs_whisper_gpt.xcodeproj; path = ../../rs_whisper_gpt/rs_whisper_gpt.xcodeproj; sourceTree = "<group>"; };
 		7618F2F42A5614E400285FE4 /* bridge_generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridge_generated.h; sourceTree = "<group>"; };
 		7618F2FB2A561B3C00285FE4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -136,6 +138,7 @@
 				33CC10EE2044A3C60003C045 /* Products */,
 				D73912EC22F37F3D000D13A0 /* Frameworks */,
 				C3BD9F37323AD2DECE445C12 /* Pods */,
+				50AB6AA4C3C73F7099515BBF /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -315,6 +318,7 @@
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
 				7618F3012A561B8600285FE4 /* ggml-base.en.bin in Resources */,
+				A4E803ED8798E2D921EE0F8C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
