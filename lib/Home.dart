@@ -98,7 +98,7 @@ Widget build(BuildContext context) {
               pinned: true,
               expandedHeight: 100.0,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Voice Notes", style: TextStyle(color: textColor, fontWeight: FontWeight.bold,)),
+                title: Text("Voice Notes", style: TextStyle(color: textColor, )),
               ),
               // actions: <Widget>[
               //   Builder(

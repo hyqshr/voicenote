@@ -93,7 +93,7 @@ class _AudioListState extends State<AudioList> {
   Widget PlaceHolder(){
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             const Text(
@@ -104,6 +104,7 @@ class _AudioListState extends State<AudioList> {
                 fontWeight: FontWeight.w200,
               ),
             ),
+            const SizedBox(height: 80,),
             Lottie.asset(
               'assets/waveform_light.json',
               width: 70,
@@ -147,11 +148,11 @@ class _AudioListState extends State<AudioList> {
       },
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     if (widget.audioToTextMap.isEmpty) {
-      return PlaceHolder();
+      return Center(child: PlaceHolder());
     } else {
       return SingleChildScrollView(
         child: Column(
@@ -168,9 +169,9 @@ class _AudioListState extends State<AudioList> {
                 future: getFileCreationDate(file.path),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    return Text('Error');
+                    return const Text('Error');
                   } else {
                     return Text(snapshot.data ?? 'Unknown Date');
                   }

@@ -132,7 +132,7 @@ Future<void> _start() async {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: _recordState != RecordState.stop ?MainAxisAlignment.spaceAround : MainAxisAlignment.center,
       children: [
         _buildText(),
         _buildRecordStopControl(),
@@ -154,12 +154,11 @@ Future<void> _start() async {
 
   Widget _buildRecordStopControl() {
     late Icon icon;
-    late Color color;
 
     if (_recordState != RecordState.stop) {
-      icon = const Icon(Icons.stop_outlined, color: Color.fromARGB(255, 96, 200, 248), size: 65);
+      icon = const Icon(Icons.stop_circle_outlined, color: Colors.lightBlue, size: 65);
     } else {
-      icon = Icon(Icons.brightness_1_outlined, color: Color.fromARGB(255, 96, 200, 248), size: 65);
+      icon = const Icon(Icons.brightness_1_outlined, color: Color.fromARGB(255, 147, 195, 234), size: 65);
     }
 
     return Row(
@@ -178,25 +177,20 @@ Future<void> _start() async {
   }
 
   Widget _buildPauseResumeControl() {
-    if (_recordState == RecordState.stop) {
-      return const SizedBox.shrink();
-    }
 
     late Icon icon;
-    late Color color;
 
     if (_recordState == RecordState.record) {
       icon = const Icon(Icons.pause, color: Colors.red, size: 65);
     } else {
-      final theme = Theme.of(context);
-      icon = const Icon(Icons.play_arrow, color: Colors.red, size: 65);
+      icon = const Icon(Icons.play_arrow_rounded, color: Colors.red, size: 65);
     }
     return Row(
       children: [
         Material(
           color: Colors.transparent,
           child: InkWell(
-            child: SizedBox(width: 65, height: 65, child: icon),
+            child: icon,
             onTap: () {
               (_recordState == RecordState.pause) ? _resume() : _pause();
             },
@@ -220,9 +214,11 @@ Future<void> _start() async {
 
     return Text(
       '$minutes : $seconds',
+      textAlign: TextAlign.center,
       style: const TextStyle(
-        fontSize: 24.0, 
-      ),
+          fontSize: 18.0,
+          fontWeight: FontWeight.w300,
+        ),
     );
   }
 
