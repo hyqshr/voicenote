@@ -158,7 +158,7 @@ Future<void> _start() async {
     if (_recordState != RecordState.stop) {
       icon = const Icon(Icons.stop_circle_outlined, color: Colors.lightBlue, size: 65);
     } else {
-      icon = const Icon(Icons.brightness_1_outlined, color: Color.fromARGB(255, 147, 195, 234), size: 65);
+      icon = const Icon(Icons.brightness_1_outlined, color: Colors.lightBlue, size: 65);
     }
 
     return Row(

@@ -4,6 +4,7 @@ import 'audio_list.dart';
 import 'package:path_provider/path_provider.dart'; // Import the path_provider package
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'pages/auth_page.dart';
 import 'searchbar.dart';
 import 'util.dart';
 
@@ -83,6 +84,7 @@ Widget build(BuildContext context) {
   final ThemeData themeData = ThemeData(
     useMaterial3: true,
     brightness: isDarkMode ? Brightness.dark : Brightness.light,
+    
   );
   // Define the text color based on the theme's brightness
   Color textColor = isDarkMode ? Colors.white : Colors.black;
@@ -100,21 +102,21 @@ Widget build(BuildContext context) {
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Voice Notes", style: TextStyle(color: textColor, )),
               ),
-              // actions: <Widget>[
-              //   Builder(
-              //     builder: (BuildContext context) {
-              //       return IconButton(
-              //         icon: Icon(Icons.person, color: Colors.blue),
-              //         onPressed: () {
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(builder: (context) => Purchase()),
-              //           );
-              //         },
-              //       );
-              //     },
-              //   ),
-              // ],
+              actions: <Widget>[
+                Builder(
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      icon: const Icon(Icons.person, color: Colors.blue),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AuthPage()),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
             SliverList(
               delegate: SliverChildListDelegate(

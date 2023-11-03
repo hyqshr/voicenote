@@ -66,17 +66,25 @@ class _AudioListState extends State<AudioList> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
                 try {
+                  print(widget.audioToTextMap);
+
+                  widget.audioToTextMap.remove(file);
+
+                  // setState(() {
+                  //   print(widget.audioToTextMap);
+                  //   widget.audioToTextMap.remove(file);
+                  // });
+                  print("after");
+                    print(widget.audioToTextMap);
+
                   await file.delete();
                   File quillJsonFile = File(fileWithDiffExtension(file.path, '.json'));
                   if (await quillJsonFile.exists()) {
                     await quillJsonFile.delete();
                   }
-                  setState(() {
-                    widget.audioToTextMap.remove(file);
-                  });
-                  widget.onRefresh();
+                  await widget.onRefresh();
                 } catch (e) {
                   print("Error deleting file: $e");
                   // You can also show a dialog or a snackbar to notify the user about the error
@@ -158,6 +166,7 @@ class _AudioListState extends State<AudioList> {
         child: Column(
           children: widget.audioToTextMap.keys.map((file) {
             return ExpansionTileCard(
+              key: file.path == null ? null : Key(file.path),
               animateTrailing: false,
               title: GestureDetector(
                 onLongPress: () {
@@ -194,6 +203,4 @@ class _AudioListState extends State<AudioList> {
       );
     }
   }
-
-
 }
