@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -47,7 +48,7 @@ String getPreviewFromJson(String jsonString) {
   if (decodedJson.isNotEmpty && decodedJson[0]['insert'] != null) {
     String insertText = decodedJson[0]['insert'];
     List<String> words = insertText.split(' ');
-    if (words.length <= 10) {
+    if (words.length <= 30) {
       return words.join(' ');
     } else {
       return words.take(10).join(' ');
@@ -56,26 +57,24 @@ String getPreviewFromJson(String jsonString) {
   return "";
 }
 
-Future<void>  renameAllFilesWithBaseName(String path, String newBaseName) async {
-  // Getting the directory of the given path
-  Directory dir = Directory(path).parent;
+Future<void> renameFilesWithBaseName(String path, String newBaseName) async {
+  // Get the directory of the given path and the base name of the file
+  var directory = Directory(path).parent;
+  var oldBaseName = p.basenameWithoutExtension(path);
 
-  // Checking if the directory exists
-  if (await dir.exists()) {
-    // Listing all files in the directory
-    await for (FileSystemEntity entity in dir.list()) {
-      if (entity is File) {
-        String fileExtension = entity.uri.pathSegments.last.split('.').last;
-        String newFileName = '$newBaseName.$fileExtension';
-        File newFile = File('${dir.path}/$newFileName');
+  // List all files in the directory
+  List<FileSystemEntity> files = await directory.list().toList();
 
-        // Renaming the file
-        await entity.rename(newFile.path);
-        print('File renamed to: $newFileName');
-      }
-    }
-  } else {
-    print('Directory does not exist.');
+  // Filter out files that have the same base name
+  var filesToRename = files.where((file) {
+    return p.basenameWithoutExtension(file.path) == oldBaseName;
+  }).toList();
+  debugPrint("filesToRename: $filesToRename");
+  // Rename each filtered file with the new base name while preserving the extension
+  for (var file in filesToRename) {
+    var fileExtension = p.extension(file.path);
+    var newPath = p.join(directory.path, '$newBaseName$fileExtension');
+    await file.rename(newPath);
   }
 }
 

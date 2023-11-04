@@ -145,7 +145,7 @@ class _AudioListState extends State<AudioList> {
             TextButton(
               onPressed: () async {
                 debugPrint('New file name: ${_renameController.text}');
-                await renameAllFilesWithBaseName(file.path, _renameController.text);
+                await renameFilesWithBaseName(file.path, _renameController.text);
                 widget.onRefresh();
                 Navigator.of(context).pop();
               },

@@ -29,7 +29,7 @@ class AudioWidget extends StatefulWidget {
 class AudioPlayerState extends State<AudioWidget> {
   static const double _controlSize = 40;
   static const double _deleteBtnSize = 20;
-
+  bool _isLoading = false; 
   final _audioPlayer = ap.AudioPlayer();
   String? transcribedText;
 
@@ -189,22 +189,42 @@ class AudioPlayerState extends State<AudioWidget> {
     debugPrint("saving to $jsonTring -- $baseFilePath");
     await file.writeAsString(jsonTring);
   }
+  void _onButtonPressed() async {
+    setState(() {
+      _isLoading = true; // Set loading to true
+    });
+    
+    try {
+      final value = await widget.api.runWhisperModel(path: widget.source);
+      setState(() {
+        transcribedText = value.join(" ");
+      });
+      await _saveTranscribedTextToFile();
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading to false once the operation is complete
+      });
+    }
+  }
+
 
   Widget _buildTranscribeButton() {
     if (transcribedText == null) {
       return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ElevatedButton(
-          child: const Text("Speech to Text"),
-          onPressed: () async {
-            final value = await widget.api.runWhisperModel(path: widget.source);
-            setState(() {
-              transcribedText = value.join(" ");
-            });
-            await _saveTranscribedTextToFile();
-          }
-        ),
-      );
+      padding: const EdgeInsets.all(10.0),
+      child: ElevatedButton(
+        child: _isLoading
+            ?  const SizedBox(
+                height: 20.0, // Smaller height
+                width: 20.0, // Smaller width
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0, // Thinner stroke
+                ),
+              ) // Show loading indicator when the API is running
+            : const Text("Speech to Text"),
+        onPressed: _isLoading ? null : _onButtonPressed, // Disable the button when loading
+      ),
+    );
     };
     return Container();
   }

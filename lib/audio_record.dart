@@ -156,9 +156,9 @@ Future<void> _start() async {
     late Icon icon;
 
     if (_recordState != RecordState.stop) {
-      icon = const Icon(Icons.stop_circle_outlined, color: Colors.lightBlue, size: 65);
+      icon = const Icon(Icons.stop_circle_outlined,  size: 65);
     } else {
-      icon = const Icon(Icons.brightness_1_outlined, color: Colors.lightBlue, size: 65);
+      icon = const Icon(Icons.brightness_1_outlined, size: 65);
     }
 
     return Row(

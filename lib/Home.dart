@@ -90,6 +90,7 @@ Widget build(BuildContext context) {
   Color textColor = isDarkMode ? Colors.white : Colors.black;
 
   return MaterialApp(
+    debugShowCheckedModeBanner: false,
     theme: themeData,
     home: Scaffold(
       body: RefreshIndicator(
@@ -98,25 +99,26 @@ Widget build(BuildContext context) {
           slivers: <Widget>[
             SliverAppBar(
               pinned: true,
+              foregroundColor: Colors.lightBlue,
               expandedHeight: 100.0,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Voice Notes", style: TextStyle(color: textColor, )),
               ),
-              actions: <Widget>[
-                Builder(
-                  builder: (BuildContext context) {
-                    return IconButton(
-                      icon: const Icon(Icons.person, color: Colors.blue),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const AuthPage()),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+              // actions: <Widget>[
+              //   Builder(
+              //     builder: (BuildContext context) {
+              //       return IconButton(
+              //         icon: const Icon(Icons.person, color: Colors.blue),
+              //         onPressed: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(builder: (context) => const AuthPage()),
+              //           );
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ],
             ),
             SliverList(
               delegate: SliverChildListDelegate(
