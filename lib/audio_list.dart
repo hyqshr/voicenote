@@ -11,12 +11,7 @@ import 'package:lottie/lottie.dart';
 
 const base = 'rs_whisper_gpt';
 final lib_path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
-final dylib = Platform.isIOS
-    ? DynamicLibrary.process()
-    : Platform.isMacOS
-        ? DynamicLibrary.executable()
-        : DynamicLibrary.open(lib_path);
-
+final dylib = DynamicLibrary.process();
 final api = RsWhisperGptImpl(dylib);
 
 
@@ -24,7 +19,7 @@ class AudioList extends StatefulWidget {
   final Map<File, String?> audioToTextMap;
   final Function onRefresh;
 
-  AudioList({
+  const AudioList({
     Key? key, 
     required this.audioToTextMap,
     required this.onRefresh,
@@ -165,9 +160,9 @@ class _AudioListState extends State<AudioList> {
       return SingleChildScrollView(
         child: Column(
           children: widget.audioToTextMap.keys.map((file) {
-            return ExpansionTileCard(
-              key: file.path == null ? null : Key(file.path),
-              animateTrailing: false,
+            return ExpansionTile(
+              key: Key(file.path),
+              // animateTrailing: false,
               title: GestureDetector(
                 onLongPress: () {
                   _renamePopupDialog(file);
