@@ -9,7 +9,8 @@
 .history
 .svn/
 migrate_working_dir/
-
+ggml-base.bin
+ggml-base.en.bin
 # IntelliJ related
 *.iml
 *.ipr

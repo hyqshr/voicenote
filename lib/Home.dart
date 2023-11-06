@@ -4,6 +4,7 @@ import 'audio_list.dart';
 import 'package:path_provider/path_provider.dart'; // Import the path_provider package
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'components/error_widget.dart';
 import 'pages/auth_page.dart';
 import 'searchbar.dart';
 import 'util.dart';
@@ -84,11 +85,12 @@ Widget build(BuildContext context) {
   final ThemeData themeData = ThemeData(
     useMaterial3: true,
     brightness: isDarkMode ? Brightness.dark : Brightness.light,
-    
   );
   // Define the text color based on the theme's brightness
   Color textColor = isDarkMode ? Colors.white : Colors.black;
-
+  ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+    return CustomError(errorDetails: errorDetails);
+  };
   return MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: themeData,
