@@ -50,6 +50,7 @@ class DefaultFirebaseOptions {
     projectId: 'voicenotes-92a03',
     authDomain: 'voicenotes-92a03.firebaseapp.com',
     storageBucket: 'voicenotes-92a03.appspot.com',
+    measurementId: 'G-80YEKB4FRD',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -66,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '773711962239',
     projectId: 'voicenotes-92a03',
     storageBucket: 'voicenotes-92a03.appspot.com',
+    iosClientId: '773711962239-vhf3ifga78bddi8iop1fmie3eucrfgnh.apps.googleusercontent.com',
     iosBundleId: 'voicenotes.yiqiu',
   );
 
@@ -75,6 +77,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '773711962239',
     projectId: 'voicenotes-92a03',
     storageBucket: 'voicenotes-92a03.appspot.com',
+    iosClientId: '773711962239-76kjk4f0lu4mil0nn8bkhcb7k765ufhp.apps.googleusercontent.com',
     iosBundleId: 'com.example.whisperGpt',
   );
 }

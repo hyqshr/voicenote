@@ -160,9 +160,9 @@ class _AudioListState extends State<AudioList> {
       return SingleChildScrollView(
         child: Column(
           children: widget.audioToTextMap.keys.map((file) {
-            return ExpansionTile(
+            return ExpansionTileCard(
               key: Key(file.path),
-              // animateTrailing: false,
+              animateTrailing: false,
               title: GestureDetector(
                 onLongPress: () {
                   _renamePopupDialog(file);

@@ -18,8 +18,6 @@ class CustomError extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-                'assets/images/error_illustration.png'),
             Text(
                   errorDetails.summary.toString(),
               textAlign: TextAlign.center,
