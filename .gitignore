@@ -10,7 +10,9 @@
 .svn/
 migrate_working_dir/
 rs_whisper_gpt/ggml-base.bin
+ggml-base.bin
 ggml-base.en.bin
+
 # IntelliJ related
 *.iml
 *.ipr
