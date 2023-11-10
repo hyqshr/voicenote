@@ -32,10 +32,11 @@ class AudioPlayerState extends State<AudioWidget> {
   bool _isLoading = false; 
   final _audioPlayer = ap.AudioPlayer();
   String? transcribedText;
-
+  String? content;
   late StreamSubscription<void> _playerStateChangedSubscription;
   late StreamSubscription<Duration?> _durationChangedSubscription;
   late StreamSubscription<Duration> _positionChangedSubscription;
+  
   Duration? _position;
   Duration? _duration;
 
@@ -63,6 +64,19 @@ class AudioPlayerState extends State<AudioWidget> {
     );
     // debugPrint(await _audioPlayer.getDuration().toString());
     super.initState();
+  }
+
+  void _refreshCallBack() async {
+    debugPrint("refreshing");
+    final jsonFile = File(widget.source.replaceFirst('.wav', '.json'));
+    if (await jsonFile.exists()) {
+            String jsonString = await jsonFile.readAsString();
+            content = getPreviewFromJson(jsonString);
+            debugPrint("updated content: $content");
+          }
+    setState(() {
+      transcribedText = content;
+    });
   }
 
   @override
@@ -101,8 +115,14 @@ class AudioPlayerState extends State<AudioWidget> {
             IconButton(
                 icon: const Icon(Icons.share, color: Colors.lightBlue, size: _deleteBtnSize),
                 onPressed: () async {
+                    // have to provide it for iPad version
+                    final box = context.findRenderObject() as RenderBox?;
                     try {
-                    await Share.shareFiles([widget.source], mimeTypes: ["audio/wav"]);
+                    await Share.shareFiles(
+                      [widget.source], mimeTypes: ["audio/wav"],
+                      text: 'Share Audio file',
+                      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                      );
                   } catch (e) {
                     print('Error while sharing audio: $e');
                   }
@@ -243,6 +263,7 @@ class AudioPlayerState extends State<AudioWidget> {
                 MaterialPageRoute(
                   builder: (context) => QuillEditorWidget(
                     source: fileWithDiffExtension(widget.source, '.json'),
+                    refreshCallBack: _refreshCallBack,
                   ),
                 ),
               );

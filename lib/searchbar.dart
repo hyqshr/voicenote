@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 typedef StringCallback = void Function(String data);
 
 class SearchBarApp extends StatefulWidget {
@@ -35,8 +33,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
               // controller.openView();
             },
             onChanged: (prompt) {
-              // controller.openView();
-              widget.setPrompt(prompt); // Call the OnPromptChanged callback here
+              widget.setPrompt(prompt);
             },
             leading: const Icon(Icons.search),
             trailing: <Widget>[
